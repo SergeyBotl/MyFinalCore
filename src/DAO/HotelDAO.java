@@ -31,22 +31,15 @@ public class HotelDAO implements DAO<Hotel> {
         }
 
         List<List<String>> inputDBData = DBUtils.getDBtoList(file);
-         try {
+        try {
             list = inputDBData.stream()
                     .map(s -> (new Hotel(Long.valueOf(s.get(0)), s.get(1), s.get(2))))
                     .collect(Collectors.toList());
             Map<Long, List<Room>> map = roomDAO.getAll().stream().collect(Collectors.groupingBy(Room::getIdHotel));
-            List<List<Room>> lists = new ArrayList<>();
-            map.forEach((l, res) -> lists.add(res));
-            int i = 0;
-            for (List<Room> room : lists) {
-                for (Hotel hotel : list) {
-                    if (hotel.getId() == room.get(i).getIdHotel()) {
-                        hotel.setRooms(room);
-                    }
-                }
-                i++;
+            for (Hotel hote : list) {
+                hote.setRooms(map.get(hote.getId()));
             }
+           
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Hotel's data is't found in DB");
         } catch (ClassCastException e) {
