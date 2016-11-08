@@ -9,56 +9,34 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Nazar on 06.11.2016.
- */
 public class DBUtils {
 
     private static String DBpath;
 
-    public static String getDBpath() {
+  /*  public static String getDBpath() {
         if (DBpath != null)
             return DBpath;
         else {
             readDBPath();
             return DBpath;
         }
-    }
+    }*/
 
     public static void readDBPath() {
-
-        System.out.println("\nPlease, wright path to DB.\nSample: C:\\\\User\\\\Projects\\\\FinalCore\\\\DB");
+        // System.out.println("\nPlease, wright path to DB.\nSample: C:\\\\User\\\\Projects\\\\FinalCore\\\\DB");
         // BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        String line = "";
-
-
-        //line = reader.readLine();
-        //line = "E:\\\\GitHub\\\\Final\\\\src\\\\DB";
+       //String line = "";
         String checkH = ".\\DB\\hotels";
         String checkR = ".\\DB\\rooms";
         String checkU = ".\\DB\\users";
-        // String checkU = line + ".\\users";
-
         if (Paths.get(checkH).toFile().exists()
                 && Paths.get(checkR).toFile().exists()
                 && Paths.get(checkU).toFile().exists()) {
             System.out.println("Successful");
-            DBpath = line;
+            //DBpath = line;
 
         } else System.out.println("Wrong input path, please, try again");
-
-
-
-
-          /*  try {
-                reader.close();
-            } catch (IOException e) {
-                System.out.println("Read data error");
-            }*/
-
     }
-
 
     public static List<List<String>> getDBtoList(File file) {
 
@@ -67,15 +45,11 @@ public class DBUtils {
         StringBuilder sb = new StringBuilder();
         try {
             br = new BufferedReader(new FileReader(file));
-
             String line = br.readLine();
-
             while (line != null) {
-
                 List<String> currentLine = new ArrayList<>(Arrays.asList(line.split(" ")));
                 result.add(currentLine);
                 line = br.readLine();
-
             }
 
         } catch (IOException e) {
@@ -119,6 +93,4 @@ public class DBUtils {
             }
         }
     }
-
-
 }
