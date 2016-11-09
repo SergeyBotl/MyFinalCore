@@ -24,7 +24,7 @@ public class Main {
         //cont.findHotelByName("Hilton");
 
 
-        //cont.cancelReservation(roomId, userId, hotelId);
+        cont.cancelReservation(roomId, userId, hotelId);
 
 
         Map<String, String> map = new HashMap<>();
