@@ -17,7 +17,6 @@ public class Room {
     }
 
 
-
     public Room(long id, int person, int price, long userReservedId) {
         this.id = id;
         this.person = person;
@@ -85,8 +84,12 @@ public class Room {
                 "id=" + id +
                 ", person=" + person +
                 ", price=" + price +
-                ", userReservedId=" + userReservedId +
-                ", Hotel=" + idHotel +
+                ", booked=" +isEmpty(userReservedId) +
+                // ", Hotel=" + idHotel +
                 '}';
+    }
+
+    String isEmpty(long id) {
+        return  id== 0 ? "Свободная" : "Забронирована";
     }
 }

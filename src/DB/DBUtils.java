@@ -11,32 +11,30 @@ import java.util.stream.Collectors;
 
 public class DBUtils {
 
+/*    private static String DBpath;
+
     private static String DBpath;
 
-  /*  public static String getDBpath() {
+    public static String getDBpath() {
         if (DBpath != null)
             return DBpath;
-        else {
+
+        String checkH = "src\\DB\\hotels";
+        String checkR = "src\\DB\\rooms";
+        String checkU = "src\\DB\\users";
+
+        if (Paths.get(checkH).toFile().exists()
+                && Paths.get(checkR).toFile().exists()
+                && Paths.get(checkU).toFile().exists()) {
+            System.out.println("Connected to DB" + System.lineSeparator());
+            DBpath = "src\\DB\\";
+            return DBpath;
+
+        } else {
             readDBPath();
             return DBpath;
         }
     }*/
-
-    public static void readDBPath() {
-        // System.out.println("\nPlease, wright path to DB.\nSample: C:\\\\User\\\\Projects\\\\FinalCore\\\\DB");
-        // BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-       //String line = "";
-        String checkH = ".\\DB\\hotels";
-        String checkR = ".\\DB\\rooms";
-        String checkU = ".\\DB\\users";
-        if (Paths.get(checkH).toFile().exists()
-                && Paths.get(checkR).toFile().exists()
-                && Paths.get(checkU).toFile().exists()) {
-            System.out.println("Successful");
-            //DBpath = line;
-
-        } else System.out.println("Wrong input path, please, try again");
-    }
 
     public static List<List<String>> getDBtoList(File file) {
 

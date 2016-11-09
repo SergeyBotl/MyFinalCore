@@ -11,29 +11,37 @@ public class Main {
 
         User dima = new User("Dima", "1111");
 
+        long userId;
 
-        long hotelId = 2;
-        long roomId = 8;
-        long userId = 5;
+       cont.getAllRoom();
+
 
         userId = cont.registerUser(dima);
-
-        //cont.findHotelByCity("Kiev");
-
-        //cont.bookRoom(roomId, userId, hotelId);
-        //cont.findHotelByName("Hilton");
-
-
-        cont.cancelReservation(roomId, userId, hotelId);
-
+        userId = 3;
 
         Map<String, String> map = new HashMap<>();
         map.put("City", "Kiev");
-       // map.put("Hotel", "Astoria");
+        // map.put("Hotel", "Astoria");
         map.put("MaxPrice", "500");
-       // map.put("Person", "4");
+        // map.put("Person", "4");
 
         cont.findRoom(map);
+
+        //cont.findHotelByCity("Kiev");
+
+        long hotelId = 6;
+        long roomId = 44;
+
+
+        //System.out.println(cont.check(roomId,userId, hotelId));
+
+        //
+
+        //cont.findHotelByName("Hilton");
+        cont.bookRoom(roomId, userId, hotelId);
+        //cont.cancelReservation(roomId, userId, hotelId);
+
+
     }
 }
 
