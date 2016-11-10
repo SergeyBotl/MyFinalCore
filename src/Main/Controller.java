@@ -130,9 +130,7 @@ public class Controller {
             } else {
                 System.out.println("Impossible");
             }
-
-
-        } else {
+       } else {
             System.out.println("Impossible");
         }
     }
@@ -161,9 +159,8 @@ public class Controller {
 
 
     Collection<Hotel> findRoom(Map<String, String> params) {
-        System.out.println("\n  Поиск комнат по параметрам");
-        int person;
-        int price;
+        System.out.println("\n  Search rooms in the parameters");
+        int person, price;
         Function<String, Integer> toInteger = Integer::valueOf;
         try {
             person = toInteger.apply(params.get("Person"));
@@ -175,45 +172,51 @@ public class Controller {
         } catch (NumberFormatException e) {
             price = 0;
         }
+        String cityFind = params.get("City");
+        String hotelFind = params.get("Hotel");
+        List<Hotel> hotels = hotelDAO.getAll().stream().collect(Collectors.toList());
 
-        Room findRooms = new Room(person, price);
+        if (cityFind != null) {
+            hotels = hotels.stream().filter(h -> h.getCityName().equals(cityFind)).collect(Collectors.toList());
+        }
+        if (hotelFind != null) {
+            hotels = hotels.stream().filter(h -> h.getHotelName().equals(hotelFind)).collect(Collectors.toList());
+        }
 
-        Predicate<Hotel> hot = (hotel -> hotel.getCityName()
-                .equals(params.get("City")) || hotel.getHotelName()
-                .equals(params.get("Hotel")));
-
-        List<Hotel> foundhotel = getAllHotel().stream()
-                .filter(hot).collect(Collectors.toList());
-        String text = "";
-        for (Hotel hotel : foundhotel) {
-            System.out.println("\n" + hotel);
-            if (person != 0 || price != 0) {
-                if (hotel.getRooms() != null) {
-                    for (Room room : hotel.getRooms()) {
-                     
-                        if (room.equals(findRooms)) {
-
-                            System.out.println("   " + room);
-                        }
-                    }
-                } else {
-                    System.out.println("\nНет информации о комнатах ");
-                }
-            } else {
-                text = "Параметры для комнат не задано, печатается весь список";
-                hotel.getRooms().forEach(room -> System.out.println("   " + room));
+        if (price != 0) {
+            int finalPrice = price;
+            for (Hotel hotel : hotels) {
+                List<Room> rooms = hotel.getRooms();
+                rooms = rooms.stream().filter(r -> r.getPrice() < finalPrice).collect(Collectors.toList());
+                hotel.setRooms(rooms);
             }
         }
 
-        System.out.println("\n Параметры поиска || " + text
+        if (person > 0) {
+            int finalPerson = person;
+            for (Hotel hotel : hotels) {
+                List<Room> rooms = hotel.getRooms();
+                rooms = rooms.stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList());
+                hotel.setRooms(rooms);
+            }
+
+        }
+
+        for (Hotel hotel : hotels) {
+            System.out.println(hotel);
+            for (Room room : hotel.getRooms()) {
+                System.out.println(room);
+            }
+        }
+
+        System.out.println("\n Search options || " // + text
                 + "\nCity:  " + params.get("City")
                 + "\nHotel: " + params.get("Hotel")
                 + "\nMaxPrice: " + price
                 + "\nPerson: " + person);
 
-        return foundhotel;
+        return hotels;
     }
-
 
     long registerUser(User user) {
         User userFound = user;
