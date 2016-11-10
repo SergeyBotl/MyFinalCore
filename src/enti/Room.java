@@ -64,7 +64,7 @@ public class Room {
 
         Room room = (Room) o;
 
-        // if (id != room.id) return false;
+
         if (person == room.person) return true;
         return price < room.price;
 

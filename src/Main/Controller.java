@@ -15,12 +15,10 @@ public class Controller {
     private DAO<Hotel> hotelDAO = new HotelDAO();
     private DAO<User> userDao = new UserDAO();
     private DAO<Room> roomDAO = new RoomDAO();
-    //private CreateData createData = new CreateData();
-    private boolean isActiveUser = false;
+
 
 
     private Collection<Room> getAllRooms() {
-
         return roomDAO.getAll();
     }
 
@@ -51,18 +49,14 @@ public class Controller {
 
 
     List<Hotel> findHotelByName(String name) {
+        Help.hp(3);
         List<Hotel> hotels = getAllHotel()
                 .stream()
                 .filter(hotel -> hotel.getHotelName().equals(name))
                 .collect(Collectors.toList());
         if (!hotels.isEmpty()) {
-            System.out.println("\n  Список отелей по названию");
-
             for (Hotel hotel : hotels) {
                 System.out.println(hotel);
-                for (Room room : hotel.getRooms()) {
-                    System.out.println("   " + room);
-                }
             }
         } else {
             System.out.println("\n  Отелей с таким именем нет");
@@ -71,22 +65,15 @@ public class Controller {
     }
 
     Collection<Hotel> findHotelByCity(String city) {
+        Help.hp(2);
         Collection<Hotel> hotels = getAllHotel()
                 .stream()
                 .filter(hotel -> hotel.getCityName().equals(city))
                 .collect(Collectors.toList());
         if (!hotels.isEmpty()) {
-            System.out.println("\n  Список отелей по городам");
-
             for (Hotel hotel : hotels) {
                 System.out.println(hotel);
 
-                if (hotel.getRooms() != null) {
-
-                    for (Room room : hotel.getRooms()) {
-                        System.out.println("   " + room);
-                    }
-                }
             }
         } else {
             System.out.println("\n  Отелей с таким городом нет");
@@ -117,7 +104,7 @@ public class Controller {
 
 
     void bookRoom(long roomId, long userId, long hotelId) {
-        System.out.println("\n   Бронирование комнаты");
+        Help.hp(4);
         Room room = check(roomId, userId, hotelId);
         if (room == null) return;
         long id = room.getUserReservedId();
@@ -137,7 +124,7 @@ public class Controller {
     }
 
     void cancelReservation(long roomId, long userId, long hotelId) {
-        System.out.println("\n   Отмена бронирования");
+        Help.hp(5);
         Room room = check(roomId, userId, hotelId);
         if (room == null) return;
         if (room != null) {
@@ -161,7 +148,7 @@ public class Controller {
 
 
     Collection<Hotel> findRoom(Map<String, String> params) {
-        System.out.println("\n  Search rooms in the parameters");
+        Help.hp(6);
         int person, price;
         Function<String, Integer> toInteger = Integer::valueOf;
         try {
@@ -212,16 +199,19 @@ public class Controller {
             }
         }
 
-        System.out.println("\n Search options || " + text
+        System.out.println("-----------------------------------------------"
+                + "\n Search options || " + text
                 + "\nCity:  " + params.get("City")
                 + "\nHotel: " + params.get("Hotel")
                 + "\nMaxPrice: " + price
-                + "\nPerson: " + person);
+                + "\nPerson: " + person
+                + "\n-----------------------------------------------");
 
         return hotels;
     }
 
     long registerUser(User user) {
+        Help.hp(1);
         User userFound = user;
 
         try {
@@ -229,9 +219,9 @@ public class Controller {
                     .stream()
                     .filter(u -> u.equals(user)).findFirst().get();
             userFound.setActive(true);
-            System.out.println("\n  Пользователь успешно зарегистрирован\n" + userFound);
+            System.out.println(" Пользователь успешно зарегистрирован\n" + userFound);
         } catch (NoSuchElementException e) {
-            System.out.println("\n  Отсутствует информация о пользователe");
+            System.out.println(" Отсутствует информация о пользователe");
         }
         return userFound.getId();
     }

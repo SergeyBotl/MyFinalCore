@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class RoomDAO implements DAO<Room> {
 
-    private static File file = new File(".\\src\\DB\\rooms");
+    private static File file = new File(DBUtils.getDBpath() + "\\\\rooms");
     private static List<Room> list = new ArrayList<>();
 
     static {

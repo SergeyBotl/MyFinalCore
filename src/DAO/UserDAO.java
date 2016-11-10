@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class UserDAO implements DAO<User> {
 
-    private static File file = new File(".\\src\\DB\\users");
+    private static File file = new File(DBUtils.getDBpath() + "\\\\users");
     private static List<User> list = new ArrayList<>();
 
     static {

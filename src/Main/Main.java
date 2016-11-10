@@ -8,38 +8,31 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         Controller cont = new Controller();
-
-        User dima = new User("Dima", "11111");
-
         long userId;
 
-       //cont.getAllRoom();
-
-
+        User dima = new User("Dima", "1111");
         userId = cont.registerUser(dima);
-        userId = 3;
+
+        long hotelId = 6;
+        long roomId = 44;
+
+        cont.findHotelByCity("Kiev");
+        cont.findHotelByName("Hilton");
+        cont.bookRoom(roomId, userId, hotelId);
+        cont.cancelReservation(roomId, userId, hotelId);
+
+
 
         Map<String, String> map = new HashMap<>();
         map.put("City", "Kiev");
-         map.put("Hotel", "Astoria");
+       // map.put("Hotel", "Astoria");
         map.put("MaxPrice", "500");
         // map.put("Person", "4");
 
         cont.findRoom(map);
 
-        //cont.findHotelByCity("Kiev");
-
-        long hotelId = 6;
-        long roomId = 44;
 
 
-        //System.out.println(cont.check(roomId,userId, hotelId));
-
-        //
-
-        //cont.findHotelByName("Hilton");
-        cont.bookRoom(roomId, userId, hotelId);
-        //cont.cancelReservation(roomId, userId, hotelId);
 
 
     }
