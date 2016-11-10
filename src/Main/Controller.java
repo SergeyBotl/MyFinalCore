@@ -119,7 +119,7 @@ class Controller {
     void cancelReservation(long roomId, long userId, long hotelId) {
         Help.hp(5);
         Room room = check(roomId, userId, hotelId);
-        if (room == null) return ;
+        if (room == null) return;
         if (room.getUserReservedId() == 0) {
             System.out.println("Импоссибле потому что комната не была забронирована");
         } else if (room.getUserReservedId() == userId) {
@@ -199,7 +199,6 @@ class Controller {
     long registerUser(User user) {
         Help.hp(1);
         User userFound = user;
-
         try {
             //noinspection OptionalGetWithoutIsPresent
             userFound = getAllUser()
