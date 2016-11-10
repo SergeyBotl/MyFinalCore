@@ -13,7 +13,7 @@ public class Main {
 
         long userId;
 
-       cont.getAllRoom();
+       //cont.getAllRoom();
 
 
         userId = cont.registerUser(dima);
@@ -21,7 +21,7 @@ public class Main {
 
         Map<String, String> map = new HashMap<>();
         map.put("City", "Kiev");
-        // map.put("Hotel", "Astoria");
+         map.put("Hotel", "Astoria");
         map.put("MaxPrice", "500");
         // map.put("Person", "4");
 

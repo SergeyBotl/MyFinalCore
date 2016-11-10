@@ -119,7 +119,7 @@ public class Controller {
     void bookRoom(long roomId, long userId, long hotelId) {
         System.out.println("\n   Бронирование комнаты");
         Room room = check(roomId, userId, hotelId);
-        if (room==null) return;
+        if (room == null) return;
         long id = room.getUserReservedId();
         if (room != null) {
             if (id != userId) {
@@ -131,7 +131,7 @@ public class Controller {
             } else {
                 System.out.println("Impossible");
             }
-       } else {
+        } else {
             System.out.println("Impossible");
         }
     }
@@ -139,7 +139,7 @@ public class Controller {
     void cancelReservation(long roomId, long userId, long hotelId) {
         System.out.println("\n   Отмена бронирования");
         Room room = check(roomId, userId, hotelId);
-        if (room==null) return;
+        if (room == null) return;
         if (room != null) {
             if (room.getUserReservedId() == 0) {
                 System.out.println("Импоссибле потому что комната не была забронирована");
@@ -184,34 +184,35 @@ public class Controller {
         if (hotelFind != null) {
             hotels = hotels.stream().filter(h -> h.getHotelName().equals(hotelFind)).collect(Collectors.toList());
         }
-
+        List<Room> rooms;
         if (price != 0) {
             int finalPrice = price;
             for (Hotel hotel : hotels) {
-                List<Room> rooms = hotel.getRooms();
+                rooms = hotel.getRooms();
                 rooms = rooms.stream().filter(r -> r.getPrice() < finalPrice).collect(Collectors.toList());
                 hotel.setRooms(rooms);
             }
         }
 
-        if (person > 0) {
+        if (person != 0) {
             int finalPerson = person;
             for (Hotel hotel : hotels) {
-                List<Room> rooms = hotel.getRooms();
+                rooms = hotel.getRooms();
                 rooms = rooms.stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList());
                 hotel.setRooms(rooms);
             }
 
         }
-
+        String text = "";
+        if (price == 0 && person == 0) text = "Print all rooms";
         for (Hotel hotel : hotels) {
             System.out.println(hotel);
             for (Room room : hotel.getRooms()) {
-                System.out.println(room);
+                System.out.println("   " + room);
             }
         }
 
-        System.out.println("\n Search options || " // + text
+        System.out.println("\n Search options || " + text
                 + "\nCity:  " + params.get("City")
                 + "\nHotel: " + params.get("Hotel")
                 + "\nMaxPrice: " + price
@@ -221,17 +222,17 @@ public class Controller {
     }
 
     long registerUser(User user) {
-        User userFound=user;
+        User userFound = user;
 
-       try {
+        try {
             userFound = getAllUser()
                     .stream()
                     .filter(u -> u.equals(user)).findFirst().get();
             userFound.setActive(true);
             System.out.println("\n  Пользователь успешно зарегистрирован\n" + userFound);
-       } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             System.out.println("\n  Отсутствует информация о пользователe");
-       }
+        }
         return userFound.getId();
     }
 
