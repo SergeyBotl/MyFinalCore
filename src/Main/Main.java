@@ -12,9 +12,9 @@ public class Main {
 
         User dima = new User("Dima", "1111");
         userId = cont.registerUser(dima);
-
+        cont.getAllRoom();
         long hotelId = 6;
-        long roomId = 44;
+        long roomId = 144;
 
         cont.findHotelByCity("Kiev");
         cont.findHotelByName("Hilton");
@@ -22,17 +22,13 @@ public class Main {
         cont.cancelReservation(roomId, userId, hotelId);
 
 
-
         Map<String, String> map = new HashMap<>();
         map.put("City", "Kiev");
-       // map.put("Hotel", "Astoria");
+        // map.put("Hotel", "Astoria");
         map.put("MaxPrice", "500");
         // map.put("Person", "4");
 
         cont.findRoom(map);
-
-
-
 
 
     }

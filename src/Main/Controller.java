@@ -8,24 +8,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
-import java.util.function.Predicate;
+
 import java.util.stream.Collectors;
 
-public class Controller {
+class Controller {
     private DAO<Hotel> hotelDAO = new HotelDAO();
     private DAO<User> userDao = new UserDAO();
     private DAO<Room> roomDAO = new RoomDAO();
 
 
 
-    private Collection<Room> getAllRooms() {
+    /*private Collection<Room> getAllRooms() {
         return roomDAO.getAll();
-    }
+    }*/
 
     void getAllRoom() {
+        Help.hp(7);
         if (!getAllHotel().isEmpty()) {
-            System.out.println("\n  Список отелей");
-
             for (Hotel hotel : getAllHotel()) {
                 System.out.println(hotel);
                 for (Room room : hotel.getRooms()) {
@@ -55,9 +54,7 @@ public class Controller {
                 .filter(hotel -> hotel.getHotelName().equals(name))
                 .collect(Collectors.toList());
         if (!hotels.isEmpty()) {
-            for (Hotel hotel : hotels) {
-                System.out.println(hotel);
-            }
+            hotels.forEach(System.out::println);
         } else {
             System.out.println("\n  Отелей с таким именем нет");
         }
@@ -71,22 +68,20 @@ public class Controller {
                 .filter(hotel -> hotel.getCityName().equals(city))
                 .collect(Collectors.toList());
         if (!hotels.isEmpty()) {
-            for (Hotel hotel : hotels) {
-                System.out.println(hotel);
-
-            }
+            hotels.forEach(System.out::println);
         } else {
             System.out.println("\n  Отелей с таким городом нет");
         }
         return hotels;
     }
 
-    Room check(long roomId, long userId, long hotelId) {
+    private Room check(long roomId, long userId, long hotelId) {
         Room room = null;
         try {
 
             if (userDao.findById(userId).isActive()) {
                 System.out.print("User: ok");
+                //noinspection OptionalGetWithoutIsPresent
                 room = getAllHotel().stream().filter(hotel -> hotel.getId() == hotelId).findFirst().get().getRooms()
                         .stream().filter(room1 -> room1.getId() == roomId).findAny().get();
                 System.out.println(", Room: ok, Hotel: ok.");
@@ -97,7 +92,7 @@ public class Controller {
         } catch (NullPointerException e) {
             System.out.println("Нет такого юзера");
         } catch (NoSuchElementException e) {
-            System.out.println(", Room: there is no room.");
+            System.out.println(", Room: there is no room.\n Импосибле");
         }
         return room;
     }
@@ -108,42 +103,34 @@ public class Controller {
         Room room = check(roomId, userId, hotelId);
         if (room == null) return;
         long id = room.getUserReservedId();
-        if (room != null) {
-            if (id != userId) {
-                if (room.getUserReservedId() == 0) {
-                    room.setUserReservedId(userId);
-                    roomDAO.syncListToDB();
-                    System.out.println("Гуд \n" + room);
-                }
-            } else {
-                System.out.println("Impossible");
+
+        if (id != userId) {
+            if (room.getUserReservedId() == 0) {
+                room.setUserReservedId(userId);
+                roomDAO.syncListToDB();
+                System.out.println("Гуд \n" + room);
             }
         } else {
             System.out.println("Impossible");
         }
+
     }
 
     void cancelReservation(long roomId, long userId, long hotelId) {
         Help.hp(5);
         Room room = check(roomId, userId, hotelId);
-        if (room == null) return;
-        if (room != null) {
-            if (room.getUserReservedId() == 0) {
-                System.out.println("Импоссибле потому что комната не была забронирована");
-            } else if (room.getUserReservedId() == userId) {
-                room.setUserReservedId(0);
-                roomDAO.syncListToDB();
-                System.out.println("Гуд \n" + room);
-            } else {
-                System.out.println("Импоссибле потому что комната была заброеирована другим юзером" + room.getUserReservedId());
-            }
-
-
+        if (room == null) return ;
+        if (room.getUserReservedId() == 0) {
+            System.out.println("Импоссибле потому что комната не была забронирована");
+        } else if (room.getUserReservedId() == userId) {
+            room.setUserReservedId(0);
+            roomDAO.syncListToDB();
+            System.out.println("Гуд \n" + room);
         } else {
-
-            System.out.println("Импоссибле");
+            System.out.println("Импоссибле потому что комната была заброеирована другим юзером" + room.getUserReservedId());
 
         }
+
     }
 
 
@@ -180,7 +167,6 @@ public class Controller {
                 hotel.setRooms(rooms);
             }
         }
-
         if (person != 0) {
             int finalPerson = person;
             for (Hotel hotel : hotels) {
@@ -188,8 +174,8 @@ public class Controller {
                 rooms = rooms.stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList());
                 hotel.setRooms(rooms);
             }
-
         }
+
         String text = "";
         if (price == 0 && person == 0) text = "Print all rooms";
         for (Hotel hotel : hotels) {
@@ -215,6 +201,7 @@ public class Controller {
         User userFound = user;
 
         try {
+            //noinspection OptionalGetWithoutIsPresent
             userFound = getAllUser()
                     .stream()
                     .filter(u -> u.equals(user)).findFirst().get();
