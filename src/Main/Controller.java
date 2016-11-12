@@ -15,7 +15,7 @@ class Controller {
     private DAO<User> userDao = new UserDAO();
     private DAO<Room> roomDAO = new RoomDAO();
 
-    void getAllRoom() {
+    void printAllRoom() {
         Help.hp(7);
         if (!getAllHotel().isEmpty()) {
             for (Hotel hotel : getAllHotel()) {
@@ -96,8 +96,8 @@ class Controller {
     void cancelReservation(long roomId, long userId, long hotelId) {
         Help.hp(5);
         Room room = check(roomId, userId, hotelId);
-        if (room != null && userDao.findById(userId).isActive() && room.getUserReservedId() == 0) {
-            room.setUserReservedId(userId);
+        if (room != null && userDao.findById(userId).isActive() && room.getUserReservedId() == userId) {
+            room.setUserReservedId(0);
             roomDAO.syncListToDB();
             System.out.println("Гуд \n" + room);
 
@@ -122,8 +122,8 @@ class Controller {
         } catch (NumberFormatException e) {
             price = 0;
         }
-        String cityFind = params.get("City");
-        String hotelFind = params.get("Hotel");
+        String cityFind = params.get("City"), hotelFind = params.get("Hotel");
+
         List<Hotel> hotels = hotelDAO.getAll().stream().collect(Collectors.toList());
 
         if (cityFind != null) {
@@ -144,9 +144,6 @@ class Controller {
         if (person != 0) {
             int finalPerson = person;
             for (Hotel hotel : hotels) {
-
-                // hotel.setRooms( hotel.getRooms().stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList()));
-
                 rooms = hotel.getRooms();
                 rooms = rooms.stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList());
                 hotel.setRooms(rooms);
