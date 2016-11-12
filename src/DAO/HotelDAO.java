@@ -117,17 +117,17 @@ public class HotelDAO implements DAO<Hotel> {
     }
 
     @Override
-    public List<Hotel> getAll() {
+    public  List<Hotel> getAll() {
         return list;
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         HotelDAO h = new HotelDAO();
         List<Room> l = new ArrayList<>();
         l.add(new Room(3, 5000));
         l.add(new Room(4, 5000));
         l.add(new Room(2, 5000));
         h.save(new Hotel("Hilton", "Kiev", l));
-    }
+    }*/
 
 }

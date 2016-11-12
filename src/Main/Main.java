@@ -12,23 +12,23 @@ public class Main {
 
         User dima = new User("Dima", "1111");
         userId = cont.registerUser(dima);
-        cont.getAllRoom();
+       // cont.getAllRoom();
         long hotelId = 6;
-        long roomId = 144;
+        long roomId = 1110;
 
-        cont.findHotelByCity("Kiev");
-        cont.findHotelByName("Hilton");
+       // cont.findHotelByCity("Kiev");
+       // cont.findHotelByName("Hilton");
         cont.bookRoom(roomId, userId, hotelId);
-        cont.cancelReservation(roomId, userId, hotelId);
+       // cont.cancelReservation(roomId, userId, hotelId);
 
 
         Map<String, String> map = new HashMap<>();
         map.put("City", "Kiev");
         // map.put("Hotel", "Astoria");
-        map.put("MaxPrice", "500");
+       // map.put("MaxPrice", "500");
         // map.put("Person", "4");
 
-        cont.findRoom(map);
+       // cont.findRoom(map);
 
 
     }

@@ -8,19 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
-
 import java.util.stream.Collectors;
 
 class Controller {
     private DAO<Hotel> hotelDAO = new HotelDAO();
     private DAO<User> userDao = new UserDAO();
     private DAO<Room> roomDAO = new RoomDAO();
-
-
-
-    /*private Collection<Room> getAllRooms() {
-        return roomDAO.getAll();
-    }*/
 
     void getAllRoom() {
         Help.hp(7);
@@ -36,7 +29,6 @@ class Controller {
         }
     }
 
-
     private Collection<Hotel> getAllHotel() {
         return hotelDAO.getAll();
     }
@@ -45,7 +37,6 @@ class Controller {
 
         return userDao.getAll();
     }
-
 
     List<Hotel> findHotelByName(String name) {
         Help.hp(3);
@@ -76,61 +67,44 @@ class Controller {
     }
 
     private Room check(long roomId, long userId, long hotelId) {
-        Room room = null;
+
         try {
-
-            if (userDao.findById(userId).isActive()) {
-                System.out.print("User: ok");
-                //noinspection OptionalGetWithoutIsPresent
-                room = getAllHotel().stream().filter(hotel -> hotel.getId() == hotelId).findFirst().get().getRooms()
-                        .stream().filter(room1 -> room1.getId() == roomId).findAny().get();
-                System.out.println(", Room: ok, Hotel: ok.");
-            } else {
-                System.out.println(" Юзер не активен");
-            }
-
-        } catch (NullPointerException e) {
-            System.out.println("Нет такого юзера");
+            //noinspection OptionalGetWithoutIsPresent
+            return getAllHotel().stream().filter(hotel -> hotel.getId() == hotelId).findFirst().get().getRooms()
+                    .stream().filter(room1 -> room1.getId() == roomId).findAny().get();
         } catch (NoSuchElementException e) {
-            System.out.println(", Room: there is no room.\n Импосибле");
+            System.out.println("Room: there is no room.");
         }
-        return room;
+        return null;
     }
 
 
     void bookRoom(long roomId, long userId, long hotelId) {
         Help.hp(4);
         Room room = check(roomId, userId, hotelId);
-        if (room == null) return;
-        long id = room.getUserReservedId();
+        if (room != null && userDao.findById(userId).isActive() && room.getUserReservedId() == 0) {
+            room.setUserReservedId(userId);
+            roomDAO.syncListToDB();
+            System.out.println("Гуд \n" + room);
 
-        if (id != userId) {
-            if (room.getUserReservedId() == 0) {
-                room.setUserReservedId(userId);
-                roomDAO.syncListToDB();
-                System.out.println("Гуд \n" + room);
-            }
         } else {
             System.out.println("Impossible");
         }
-
+        // System.out.println(" Юзер не активен");
     }
 
     void cancelReservation(long roomId, long userId, long hotelId) {
         Help.hp(5);
         Room room = check(roomId, userId, hotelId);
-        if (room == null) return;
-        if (room.getUserReservedId() == 0) {
-            System.out.println("Импоссибле потому что комната не была забронирована");
-        } else if (room.getUserReservedId() == userId) {
-            room.setUserReservedId(0);
+        if (room != null && userDao.findById(userId).isActive() && room.getUserReservedId() == 0) {
+            room.setUserReservedId(userId);
             roomDAO.syncListToDB();
             System.out.println("Гуд \n" + room);
+
         } else {
-            System.out.println("Импоссибле потому что комната была заброеирована другим юзером" + room.getUserReservedId());
-
+            System.out.println("Impossible");
         }
-
+        // System.out.println("Kомната была заброеирована другим юзером" + room.getUserReservedId());
     }
 
 
@@ -170,6 +144,9 @@ class Controller {
         if (person != 0) {
             int finalPerson = person;
             for (Hotel hotel : hotels) {
+
+                // hotel.setRooms( hotel.getRooms().stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList()));
+
                 rooms = hotel.getRooms();
                 rooms = rooms.stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList());
                 hotel.setRooms(rooms);

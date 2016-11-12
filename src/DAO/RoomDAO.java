@@ -25,11 +25,11 @@ public class RoomDAO implements DAO<Room> {
             list.clear();
 
         List<List<String>> inputDBData = DBUtils.getDBtoList(file);
-       try {
+        try {
             list = inputDBData.stream()
                     .map(s -> (new Room(Long.valueOf(s.get(0)), Integer.valueOf(s.get(1)), Integer.valueOf(s.get(2)), Long.valueOf(s.get(3)), Long.valueOf(s.get(4)))))
                     .collect(Collectors.toList());
-    } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             System.out.println("Room data is't found in DB");
         } catch (ClassCastException e) {
             System.out.println("Incorrect type of input room's data");
@@ -49,7 +49,7 @@ public class RoomDAO implements DAO<Room> {
 
             for (Room room : list) {
                 sb.append(room.getId() + " " + room.getPerson() + " " + room.getPrice()
-                        + " " + room.getUserReservedId() +" "+room.getIdHotel()+ System.lineSeparator());
+                        + " " + room.getUserReservedId() + " " + room.getIdHotel() + System.lineSeparator());
             }
             bw.write(sb.toString());
 
@@ -71,7 +71,7 @@ public class RoomDAO implements DAO<Room> {
             return false;
         if (list.isEmpty())
             room.setId(0);
-        //else room.setId(list.get(list.size() - 1).getId() + 1);
+            //else room.setId(list.get(list.size() - 1).getId() + 1);
         else room.setId(list.size() + 1);
         room.setUserReservedId(-1);
         list.add(room);
@@ -95,12 +95,10 @@ public class RoomDAO implements DAO<Room> {
 
     @Override
     public Room findById(long id) {
-        try {
-            return list.parallelStream().filter(e -> e.getId() == id).findFirst().orElse(null);
-        } catch (NullPointerException e) {
-            System.out.println("Room with id=" + id + " not found");
-            return null;
-        }
+        return list.stream()
+                .filter(e -> e.getId() != 0 && e.getId() == id).findFirst().orElse(null);
+
+
     }
 
     @Override
