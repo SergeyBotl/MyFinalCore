@@ -9,13 +9,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
 public class UserDAO implements DAO<User> {
 
     private static File file = new File(DBUtils.getDBpath() + "\\\\users");
-    private static List<User> list = new ArrayList<>();
+    public static List<User> list = new ArrayList<>();
+
 
     static {
         refreshList();
@@ -25,8 +27,11 @@ public class UserDAO implements DAO<User> {
         if (!list.isEmpty())
             list.clear();
         List<List<String>> inputDBData = DBUtils.getDBtoList(file);
+
         try {
-        list = inputDBData.stream()
+            if (file.length() == 0) return;
+
+            list = inputDBData.stream()
                     .map(s -> (new User(Long.valueOf(s.get(0)), s.get(1), s.get(2))))
                     .collect(Collectors.toList());
         } catch (IndexOutOfBoundsException e) {
@@ -41,38 +46,25 @@ public class UserDAO implements DAO<User> {
         if (list == null) {
             return;
         }
-        BufferedWriter bw = null;
-        try {
-            bw = new BufferedWriter(new FileWriter(file, false));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
             StringBuilder sb = new StringBuilder();
-
             for (User user : list)
-                sb.append(user.getId() + " " + user.getUserName() + " " + user.getPassword() + System.lineSeparator());
-
+                sb.append(user.getId() + " "
+                        + user.getUserName() + " "
+                        + user.getPassword()
+                        + System.lineSeparator());
             bw.write(sb.toString());
-
         } catch (IOException e) {
             System.out.println("Wright user's data in DB was canceled");
-        } finally {
-            if (bw != null)
-                try {
-                    bw.close();
-                } catch (IOException e) {
-                    System.out.println("Can't close DB connection");
-                }
         }
     }
 
     @Override
-    public boolean save(User user) {
-        if (user == null)
-            return false;
-        if (list.isEmpty())
-            user.setId(0);
-        else user.setId(list.get(list.size() - 1).getId() + 1);
+    public User save(User user) {
+        user.setId(list.size() + 1);
         list.add(user);
         syncListToDB();
-        return true;
+        return user;
     }
 
 
@@ -99,6 +91,11 @@ public class UserDAO implements DAO<User> {
     @Override
     public List<User> getAll() {
         return list;
+    }
+
+    public boolean isExist(User user) {
+        if (list.size() == 0) save(new User("admin", "admin"));
+        return list.stream().anyMatch(u -> u.equals(user));
     }
 
 }

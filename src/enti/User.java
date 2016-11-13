@@ -1,6 +1,6 @@
 package enti;
 
-public class User  {
+public class User   {
     private long id;
     private String userName;
     private String password;
@@ -17,6 +17,29 @@ public class User  {
         this.password = password;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -27,14 +50,6 @@ public class User  {
         if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
         return password != null ? password.equals(user.password) : user.password == null;
 
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 
     @Override
@@ -53,20 +68,6 @@ public class User  {
                 '}';
     }
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }
 

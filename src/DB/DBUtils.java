@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class DBUtils {
 
-      private static String DBpath;
+    private static String DBpath;
 
     public static String getDBpath() {
         if (DBpath != null)
@@ -70,10 +70,10 @@ public class DBUtils {
     public static List<List<String>> getDBtoList(File file) {
 
         List<List<String>> result = new ArrayList<>();
-        BufferedReader br = null;
+
         StringBuilder sb = new StringBuilder();
-        try {
-            br = new BufferedReader(new FileReader(file));
+        try (BufferedReader br = new BufferedReader(new FileReader(file));) {
+
             String line = br.readLine();
             while (line != null) {
                 List<String> currentLine = new ArrayList<>(Arrays.asList(line.split(" ")));
@@ -83,16 +83,9 @@ public class DBUtils {
 
         } catch (IOException e) {
             System.out.println("Read data error");
-        } finally {
-            try {
-                if (br != null)
-                    br.close();
-            } catch (IOException e) {
-                System.out.println("Read data error");
-            }
         }
 
-        return result;
+        return result == null ? null : result;
     }
 
     public static String getDBtoString(File file) {

@@ -2,6 +2,7 @@ package DAO;
 
 import DB.DBUtils;
 import enti.Room;
+import enti.User;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -66,17 +67,13 @@ public class RoomDAO implements DAO<Room> {
     }
 
     @Override
-    public boolean save(Room room) {
-        if (room == null)
-            return false;
-        if (list.isEmpty())
-            room.setId(0);
-            //else room.setId(list.get(list.size() - 1).getId() + 1);
-        else room.setId(list.size() + 1);
-        room.setUserReservedId(-1);
+    public Room save(Room room) {
+
+        room.setId(list.size() + 1);
+        room.setUserReservedId(0);
         list.add(room);
         syncListToDB();
-        return true;
+        return room;
     }
 
 

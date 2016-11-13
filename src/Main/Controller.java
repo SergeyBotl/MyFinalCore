@@ -12,8 +12,9 @@ import java.util.stream.Collectors;
 
 class Controller {
     private DAO<Hotel> hotelDAO = new HotelDAO();
-    private DAO<User> userDao = new UserDAO();
+    private UserDAO userDao = new UserDAO();
     private DAO<Room> roomDAO = new RoomDAO();
+    CurrentUser currentUser = new CurrentUser();
 
     void printAllRoom() {
         Help.hp(7);
@@ -73,7 +74,7 @@ class Controller {
             return getAllHotel().stream().filter(hotel -> hotel.getId() == hotelId).findFirst().get().getRooms()
                     .stream().filter(room1 -> room1.getId() == roomId).findAny().get();
         } catch (NoSuchElementException e) {
-            System.out.println("Room: there is no room.");
+            System.out.println("Нет такой комнаты");
         }
         return null;
     }
@@ -81,22 +82,29 @@ class Controller {
 
     void bookRoom(long roomId, long userId, long hotelId) {
         Help.hp(4);
+        if (!isАctivated(userId)) return;
         Room room = check(roomId, userId, hotelId);
-        if (room != null && userDao.findById(userId).isActive() && room.getUserReservedId() == 0) {
-            room.setUserReservedId(userId);
-            roomDAO.syncListToDB();
-            System.out.println("Гуд \n" + room);
-
-        } else {
-            System.out.println("Impossible");
+        if (room != null) {
+            if (room.getUserReservedId() == 0) {
+                room.setUserReservedId(userId);
+                roomDAO.syncListToDB();
+                System.out.println("Гуд \n" + room);
+            } else {
+                if (room.getUserReservedId() == userId) {
+                    System.out.println("Вы ранее уже забронировали эту комнату");
+                } else {
+                    System.out.println("   IMPOSSIBLE\nКомната уже забронирована пользователем с id: " + room.getUserReservedId());
+                }
+            }
         }
-        // System.out.println(" Юзер не активен");
     }
 
     void cancelReservation(long roomId, long userId, long hotelId) {
         Help.hp(5);
+        if (!isАctivated(userId))
+            return;
         Room room = check(roomId, userId, hotelId);
-        if (room != null && userDao.findById(userId).isActive() && room.getUserReservedId() == userId) {
+        if (room != null && room.getUserReservedId() == userId) {
             room.setUserReservedId(0);
             roomDAO.syncListToDB();
             System.out.println("Гуд \n" + room);
@@ -111,6 +119,8 @@ class Controller {
     Collection<Hotel> findRoom(Map<String, String> params) {
         Help.hp(6);
         int person, price;
+        String cityFind = params.get("City"), hotelFind = params.get("Hotel");
+
         Function<String, Integer> toInteger = Integer::valueOf;
         try {
             person = toInteger.apply(params.get("Person"));
@@ -122,7 +132,7 @@ class Controller {
         } catch (NumberFormatException e) {
             price = 0;
         }
-        String cityFind = params.get("City"), hotelFind = params.get("Hotel");
+
 
         List<Hotel> hotels = hotelDAO.getAll().stream().collect(Collectors.toList());
 
@@ -170,9 +180,9 @@ class Controller {
         return hotels;
     }
 
-    long registerUser(User user) {
+   /* long registerUser(User user) {
         Help.hp(1);
-        User userFound = user;
+        User userFound = null;//user;
         try {
             //noinspection OptionalGetWithoutIsPresent
             userFound = getAllUser()
@@ -184,6 +194,29 @@ class Controller {
             System.out.println(" Отсутствует информация о пользователe");
         }
         return userFound.getId();
+    }*/
+
+    private boolean isАctivated(long id) {
+
+        if (currentUser.isLogIn(id) != null && currentUser.isLogIn(id).isActive()) {
+
+            return true;
+        }
+        System.out.println("Юзер не зарегистрирован");
+        return false;
+    }
+
+    void logIn(User user) {
+        Help.hp(8);
+        User userReg = getAllUser().stream().filter(u -> u.equals(user)).findFirst().orElse(null);
+
+        if (userReg == null) {
+            userReg = userDao.save(user);
+            System.out.print("Registered user: ok, ");
+        }
+
+        currentUser.logIn(userReg);
+        System.out.println("User login: ok\n" + getAllUser().stream().filter(u -> u.equals(user)).findFirst().get());
     }
 
 }

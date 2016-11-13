@@ -3,6 +3,7 @@ package DAO;
 import DB.DBUtils;
 import enti.Hotel;
 import enti.Room;
+import enti.User;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -81,15 +82,11 @@ public class HotelDAO implements DAO<Hotel> {
     }
 
     @Override
-    public boolean save(Hotel hotel) {
-        if (hotel == null)
-            return false;
-        if (list.isEmpty())
-            hotel.setId(0);
-        else hotel.setId(list.get(list.size() - 1).getId() + 1);
+    public Hotel save(Hotel hotel) {
+      hotel.setId(list.size()+ 1);
         list.add(hotel);
         syncListToDB();
-        return true;
+        return hotel;
     }
 
 
