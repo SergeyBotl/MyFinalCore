@@ -30,8 +30,7 @@ public class UserDAO implements DAO<User> {
 
         try {
             if (file.length() == 0) return;
-
-            list = inputDBData.stream()
+         list = inputDBData.stream()
                     .map(s -> (new User(Long.valueOf(s.get(0)), s.get(1), s.get(2))))
                     .collect(Collectors.toList());
         } catch (IndexOutOfBoundsException e) {

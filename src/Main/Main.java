@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
        Controller cont = new Controller();
 
-        User dima = new User("Dimas", "21111");
+        User dima = new User("Dima", "1111");
 
 
 
@@ -30,10 +30,10 @@ public class Main {
         Map<String, String> map = new HashMap<>();
         map.put("City", "Kiev");
         // map.put("Hotel", "Astoria");
-        // map.put("MaxPrice", "500");
+         map.put("MaxPrice", "500");
         // map.put("Person", "4");
 
-       // cont.findRoom(map);
+        cont.findRoom(map);
 
 
     }

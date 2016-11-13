@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 class Controller {
     private DAO<Hotel> hotelDAO = new HotelDAO();
+
     private UserDAO userDao = new UserDAO();
     private DAO<Room> roomDAO = new RoomDAO();
     CurrentUser currentUser = new CurrentUser();
@@ -121,14 +122,17 @@ class Controller {
         int person, price;
         String cityFind = params.get("City"), hotelFind = params.get("Hotel");
 
-        Function<String, Integer> toInteger = Integer::valueOf;
+        //Function<String, Integer> toInteger = Integer::valueOf;
         try {
-            person = toInteger.apply(params.get("Person"));
+
+            // person = toInteger.apply(params.get("Person"));
+            person = Integer.valueOf(params.get("Person"));
         } catch (NumberFormatException e) {
             person = 0;
         }
         try {
-            price = toInteger.apply(params.get("MaxPrice"));
+            //price = toInteger.apply(params.get("MaxPrice"));
+            price = Integer.valueOf(params.get("MaxPrice"));
         } catch (NumberFormatException e) {
             price = 0;
         }
@@ -146,6 +150,8 @@ class Controller {
         if (price != 0) {
             int finalPrice = price;
             for (Hotel hotel : hotels) {
+
+                System.out.println("==" + hotel.getClass());
                 rooms = hotel.getRooms();
                 rooms = rooms.stream().filter(r -> r.getPrice() < finalPrice).collect(Collectors.toList());
                 hotel.setRooms(rooms);
@@ -154,6 +160,7 @@ class Controller {
         if (person != 0) {
             int finalPerson = person;
             for (Hotel hotel : hotels) {
+
                 rooms = hotel.getRooms();
                 rooms = rooms.stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList());
                 hotel.setRooms(rooms);
@@ -180,28 +187,9 @@ class Controller {
         return hotels;
     }
 
-   /* long registerUser(User user) {
-        Help.hp(1);
-        User userFound = null;//user;
-        try {
-            //noinspection OptionalGetWithoutIsPresent
-            userFound = getAllUser()
-                    .stream()
-                    .filter(u -> u.equals(user)).findFirst().get();
-            userFound.setActive(true);
-            System.out.println(" Пользователь успешно зарегистрирован\n" + userFound);
-        } catch (NoSuchElementException e) {
-            System.out.println(" Отсутствует информация о пользователe");
-        }
-        return userFound.getId();
-    }*/
-
     private boolean isАctivated(long id) {
-
-        if (currentUser.isLogIn(id) != null && currentUser.isLogIn(id).isActive()) {
-
+        if (currentUser.isLogIn(id) != null && currentUser.isLogIn(id).isActive())
             return true;
-        }
         System.out.println("Юзер не зарегистрирован");
         return false;
     }
@@ -209,14 +197,12 @@ class Controller {
     void logIn(User user) {
         Help.hp(8);
         User userReg = getAllUser().stream().filter(u -> u.equals(user)).findFirst().orElse(null);
-
         if (userReg == null) {
             userReg = userDao.save(user);
             System.out.print("Registered user: ok, ");
         }
-
         currentUser.logIn(userReg);
-        System.out.println("User login: ok\n" + getAllUser().stream().filter(u -> u.equals(user)).findFirst().get());
+        System.out.println("User login: ok\n" + userReg);
     }
 
 }
