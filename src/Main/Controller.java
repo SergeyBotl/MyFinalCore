@@ -113,7 +113,6 @@ class Controller {
         } else {
             System.out.println("Impossible");
         }
-        // System.out.println("Kомната была заброеирована другим юзером" + room.getUserReservedId());
     }
 
 
@@ -122,21 +121,16 @@ class Controller {
         int person, price;
         String cityFind = params.get("City"), hotelFind = params.get("Hotel");
 
-        //Function<String, Integer> toInteger = Integer::valueOf;
         try {
-
-            // person = toInteger.apply(params.get("Person"));
             person = Integer.valueOf(params.get("Person"));
         } catch (NumberFormatException e) {
             person = 0;
         }
         try {
-            //price = toInteger.apply(params.get("MaxPrice"));
             price = Integer.valueOf(params.get("MaxPrice"));
         } catch (NumberFormatException e) {
             price = 0;
         }
-
 
         List<Hotel> hotels = hotelDAO.getAll().stream().collect(Collectors.toList());
 
@@ -150,8 +144,6 @@ class Controller {
         if (price != 0) {
             int finalPrice = price;
             for (Hotel hotel : hotels) {
-
-                System.out.println("==" + hotel.getClass());
                 rooms = hotel.getRooms();
                 rooms = rooms.stream().filter(r -> r.getPrice() < finalPrice).collect(Collectors.toList());
                 hotel.setRooms(rooms);
@@ -160,7 +152,6 @@ class Controller {
         if (person != 0) {
             int finalPerson = person;
             for (Hotel hotel : hotels) {
-
                 rooms = hotel.getRooms();
                 rooms = rooms.stream().filter(r -> r.getPerson() == finalPerson).collect(Collectors.toList());
                 hotel.setRooms(rooms);
@@ -184,7 +175,10 @@ class Controller {
                 + "\nPerson: " + person
                 + "\n-----------------------------------------------");
 
+        System.out.println("==" + hotels.getClass());
+
         return hotels;
+
     }
 
     private boolean isАctivated(long id) {
