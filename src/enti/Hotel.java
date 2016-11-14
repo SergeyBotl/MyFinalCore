@@ -29,7 +29,7 @@ public class Hotel {
         this.hotelName = hotelName;
         this.cityName = cityName;
         this.rooms = rooms;
-        RoomDAO roomDAO = new RoomDAO();
+        RoomDAO roomDAO = RoomDAO.getRoomDAO();
         rooms.forEach(roomDAO::save);
 
     }

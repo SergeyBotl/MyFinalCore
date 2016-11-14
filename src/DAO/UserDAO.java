@@ -17,9 +17,8 @@ public class UserDAO implements DAO<User> {
 
     private static UserDAO userDAO;
 
-  /*  private UserDAO() {
-
-    }*/
+    private UserDAO() {
+    }
 
     public static UserDAO getUserDAO() {
         if (userDAO == null) {

@@ -31,7 +31,7 @@ public class HotelDAO implements DAO<Hotel> {
     private static File file = new File(DBUtils.getDBpath() + "\\\\hotels");
     private static List<Hotel> list = new ArrayList<>();
     private static List<Hotel> hotelsRoomsId = new ArrayList<>();
-    private static DAO<Room> roomDAO = new RoomDAO();
+    private static DAO<Room> roomDAO = RoomDAO.getRoomDAO();
 
     static {
         syncDBtoList();

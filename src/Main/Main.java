@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
        Controller cont = new Controller();
 
-        User dima = new User("Dima", "1111");
+        User dima = new User("Dimas", "1111");
 
 
 
