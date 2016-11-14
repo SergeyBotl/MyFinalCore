@@ -13,7 +13,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RoomDAO implements DAO<Room> {
+    private static RoomDAO roomDAO;
 
+  /*  private RoonDAO() {
+
+    }*/
+
+    public static RoomDAO getRoomDAO() {
+        if (roomDAO == null) {
+            roomDAO = new RoomDAO();
+        }
+        return roomDAO;
+    }
     private static File file = new File(DBUtils.getDBpath() + "\\\\rooms");
     private static List<Room> list = new ArrayList<>();
 

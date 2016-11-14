@@ -16,6 +16,18 @@ import java.util.stream.Collectors;
 
 public class HotelDAO implements DAO<Hotel> {
 
+    private static HotelDAO hotelDAO;
+
+    private HotelDAO() {
+    }
+
+    public static HotelDAO getHotelDAO() {
+        if (hotelDAO == null) {
+            hotelDAO = new HotelDAO();
+        }
+        return hotelDAO;
+    }
+
     private static File file = new File(DBUtils.getDBpath() + "\\\\hotels");
     private static List<Hotel> list = new ArrayList<>();
     private static List<Hotel> hotelsRoomsId = new ArrayList<>();

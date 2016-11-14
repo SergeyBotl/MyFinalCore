@@ -15,6 +15,20 @@ import java.util.stream.Collectors;
 
 public class UserDAO implements DAO<User> {
 
+    private static UserDAO userDAO;
+
+  /*  private UserDAO() {
+
+    }*/
+
+    public static UserDAO getUserDAO() {
+        if (userDAO == null) {
+            userDAO = new UserDAO();
+        }
+        return userDAO;
+    }
+
+
     private static File file = new File(DBUtils.getDBpath() + "\\\\users");
     public static List<User> list = new ArrayList<>();
 
@@ -30,7 +44,7 @@ public class UserDAO implements DAO<User> {
 
         try {
             if (file.length() == 0) return;
-         list = inputDBData.stream()
+            list = inputDBData.stream()
                     .map(s -> (new User(Long.valueOf(s.get(0)), s.get(1), s.get(2))))
                     .collect(Collectors.toList());
         } catch (IndexOutOfBoundsException e) {

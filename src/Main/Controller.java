@@ -7,14 +7,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 class Controller {
-    private DAO<Hotel> hotelDAO = new HotelDAO();
-
-    private UserDAO userDao = new UserDAO();
-    private DAO<Room> roomDAO = new RoomDAO();
+    private HotelDAO hotelDAO = HotelDAO.getHotelDAO();
+    private UserDAO userDao = UserDAO.getUserDAO();
+    private RoomDAO roomDAO = RoomDAO.getRoomDAO();
     CurrentUser currentUser = new CurrentUser();
 
     void printAllRoom() {
@@ -36,8 +34,7 @@ class Controller {
     }
 
     private Collection<User> getAllUser() {
-
-        return userDao.getAll();
+       return userDao.getAll();
     }
 
     List<Hotel> findHotelByName(String name) {
@@ -175,7 +172,7 @@ class Controller {
                 + "\nPerson: " + person
                 + "\n-----------------------------------------------");
 
-        System.out.println("==" + hotels.getClass());
+       // System.out.println("//" + hotels.getClass());
 
         return hotels;
 
