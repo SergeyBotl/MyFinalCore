@@ -28,7 +28,6 @@ public class UserDAO implements DAO<User> {
         return userDAO;
     }
 
-
     private static File file = new File(DBUtils.getDBpath() + "\\\\users");
     public static List<User> list = new ArrayList<>();
 
@@ -37,25 +36,23 @@ public class UserDAO implements DAO<User> {
         refreshList();
     }
 
-    private static void refreshList() {
-        if (!list.isEmpty())
-            list.clear();
-        List<List<String>> inputDBData = DBUtils.getDBtoList(file);
+     private static void refreshList() {
+         if (!list.isEmpty())
+             list.clear();
+         List<List<String>> inputDBData = DBUtils.getDBtoList(file);
+         try {
+             if (file.length() == 0) return;
+             list = inputDBData.stream()
+                     .map(s -> (new User(Long.valueOf(s.get(0)), s.get(1), s.get(2))))
+                     .collect(Collectors.toList());
+         } catch (IndexOutOfBoundsException e) {
+             System.out.println("User data is't found in DB");
+         } catch (ClassCastException e) {
+             System.out.println("Incorrect type of input user's data");
+         }
+     }
 
-        try {
-            if (file.length() == 0) return;
-            list = inputDBData.stream()
-                    .map(s -> (new User(Long.valueOf(s.get(0)), s.get(1), s.get(2))))
-                    .collect(Collectors.toList());
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("User data is't found in DB");
-        } catch (ClassCastException e) {
-            System.out.println("Incorrect type of input user's data");
-        }
-
-    }
-
-    public void syncListToDB() {
+         public void syncListToDB() {
         if (list == null) {
             return;
         }
@@ -92,18 +89,15 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public User findById(long id) {
-
-        try {
+        if (list != null)
             return list.parallelStream().filter(e -> e.getId() == id).findFirst().orElse(null);
-        } catch (NullPointerException e) {
-            System.out.println("User with id=" + id + " not found");
-            return null;
-        }
+        System.out.println("User with id=" + id + " not found");
+        return null;
     }
 
     @Override
     public List<User> getAll() {
-        return list;
+          return list;
     }
 
     public boolean isExist(User user) {

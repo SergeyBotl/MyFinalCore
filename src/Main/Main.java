@@ -21,7 +21,7 @@ public class Main {
         long hotelId = 6;
         long roomId = 110;
         long userId = 1;
-        // cont.findHotelByCity("Kiev");
+        cont.findHotelByCity("Kiev");
         // cont.findHotelByName("Hilton");
       cont.bookRoom(roomId, userId, hotelId);
        // cont.cancelReservation(roomId, userId, hotelId);

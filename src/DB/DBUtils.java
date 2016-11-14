@@ -68,27 +68,21 @@ public class DBUtils {
     }
 
     public static List<List<String>> getDBtoList(File file) {
-
         List<List<String>> result = new ArrayList<>();
-
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(file));) {
-
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = br.readLine();
             while (line != null) {
-                List<String> currentLine = new ArrayList<>(Arrays.asList(line.split(" ")));
-                result.add(currentLine);
+                result.add(Arrays.asList(line.split(" ")));
                 line = br.readLine();
             }
-
+            return result;
         } catch (IOException e) {
             System.out.println("Read data error");
         }
-
-        return result == null ? null : result;
+        return null;
     }
 
-    public static String getDBtoString(File file) {
+  /*  public static String getDBtoString(File file) {
 
         BufferedReader br = null;
         StringBuilder sb;
@@ -114,5 +108,5 @@ public class DBUtils {
                 System.out.println("Read data error");
             }
         }
-    }
+    }*/
 }
